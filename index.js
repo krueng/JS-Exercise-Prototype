@@ -39,15 +39,42 @@ Airplane.prototype.land = function () {
         + It should return a string with `name` and `age`. Example: "Mary, 50"
 */
 
-function Person() {
-  
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+  this.stomach = [];
 }
 
+Person.prototype.eat = function (edible) {
+  this.stomach.length < 10 ? this.stomach.push(edible) : this.stomach.length = 10;
+}
 
+Person.prototype.poop = function () {
+  this.stomach = [];
+}
 
+Person.prototype.toString = function () {
+  return `${this.name}, ${this.age}`
+}
 
+//create my objects
+const ad = new Person('Ad', 111);
+const am = new Person('Am', 119);
 
+console.log(ad.toString());
+console.log(am.toString());
 
+//eat
+ad.eat('🥝');
+ad.eat('🍢');
+ad.eat('🥗');
+ad.eat('🫕');
+ad.eat('🥭');
+
+console.log(ad.stomach);
+
+ad.poop();
+console.log(ad.stomach);
 
 /*
   TASK 2
@@ -63,11 +90,31 @@ function Person() {
         + The `drive` method should return a string "I ran out of fuel at x miles!" x being `odometer`.
 */
 
-function Car() {
-  
+function Car(model, milesPerGallon) {
+  this.model = model;
+  this.milesPerGallon = milesPerGallon;
+  this.tank = 0;
+  this.odometer = 0;
 }
 
+Car.prototype.fill = function (gallons) {
+  this.tank += gallons;
+}
 
+Car.prototype.drive = function (distance) {
+  this.odometer += distance;
+  this.tank -= this.milesPerGallon;
+}
+
+Car.prototype.intoString = function () {
+  return `This ${this.model} can go for ${this.milesPerGallon} miles per gallons`
+}
+//create my objects
+const toyAta = new Car('Toy Ata', 99);
+const wagon = new Car('Fox Wagon', 77);
+
+console.log(toyAta.intoString());
+console.log(wagon.intoString());
 /*
   TASK 3
     - Write a Baby constructor subclassing Person.
@@ -75,32 +122,45 @@ function Car() {
     - Besides the methods on Person.prototype, babies have the ability to `.play()`:
         + Should return a string "Playing with x", x being the favorite toy.
 */
-function Baby() {
- 
+function Baby(name, age, favoriteToy) {
+  //baby inherit the person
+  Person.call(this, name, age); //only what Parson has.
+  //Baby's own
+  this.favoriteToy = favoriteToy;
 }
 
+//tell to inherit the Person's method
+Baby.prototype = Object.create(Person.prototype);
 
+Baby.prototype.play = function(){
+  return `Playing with ${this.favoriteToy}`;
+}
+
+//create my object
+const giantBaby = new Baby('Moe', 55, 'Spatula');
+
+console.log(giantBaby.play());
 /* 
   TASK 4
   In your own words explain the four principles for the "this" keyword below:
-  1. 
-  2. 
-  3. 
-  4. 
+  1. Global scope without strict mode will return undifined, else will return window
+  2. Implicit Binding: used for about 80% of the time, look to the left of the dot, apply to object with method.
+  3. Explicit Binding: used for .call, .apply, and .bind.
+  4. New Binding: Pointing to the new created object, new keyword.
 */
 
 
 ///////// END OF CHALLENGE /////////
 
 /* 🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑 Please do not modify anything below this line 🛑🛑🛑🛑🛑🛑🛑🛑🛑🛑 */
-function foo(){
+function foo() {
   console.log('its working!');
   return 'bar';
 }
 foo();
 module.exports = {
   foo,
-  Person, 
+  Person,
   Car,
   Baby
 }
