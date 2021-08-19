@@ -103,18 +103,27 @@ Car.prototype.fill = function (gallons) {
 
 Car.prototype.drive = function (distance) {
   this.odometer += distance;
-  this.tank -= this.milesPerGallon;
+  const driveableDistance = this.tank * this.milesPerGallon;
+
+  //if distance is more than available fuel
+  if (driveableDistance < distance) {
+    return `I ran out of fuel at ${driveableDistance} miles!`
+  } else {
+    this.tank -= distance / this.milesPerGallon;
+    return `I can still drive ${this.milesPerGallon * this.tank} more miles with ${this.tank} gallons fuel in the tank.`
+  }
+
 }
 
-Car.prototype.intoString = function () {
-  return `This ${this.model} can go for ${this.milesPerGallon} miles per gallons`
-}
 //create my objects
-const toyAta = new Car('Toy Ata', 99);
-const wagon = new Car('Fox Wagon', 77);
+const moto = new Car('Moto', 50);
 
-console.log(toyAta.intoString());
-console.log(wagon.intoString());
+//fill in the tank
+moto.fill(25);
+
+console.log(moto.drive(5005))
+// console.log(moto.tank);
+
 /*
   TASK 3
     - Write a Baby constructor subclassing Person.
@@ -132,7 +141,7 @@ function Baby(name, age, favoriteToy) {
 //tell to inherit the Person's method
 Baby.prototype = Object.create(Person.prototype);
 
-Baby.prototype.play = function(){
+Baby.prototype.play = function () {
   return `Playing with ${this.favoriteToy}`;
 }
 
